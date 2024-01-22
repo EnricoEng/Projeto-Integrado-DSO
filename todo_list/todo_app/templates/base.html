@@ -1,0 +1,35 @@
+<!-- todo_list/todo_app/templates/base.html -->
+<!-- Base template -->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Simple.css-->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <title>To-do Lists</title>
+</head>
+
+<body>
+    <div>
+        <h1 onclick="location.href='{% url "index" %}'">
+           To-do Lists
+        </h1>
+    </div>
+    <div>
+        <ul>
+            <li class="nav-link">
+                <a href="{% url 'logout' %}" 
+                   class="nav-item dropdown-item">Logout</a>
+            </li>
+        </ul>
+        
+        {% block content %}
+        This content will be replaced by different html code for each page.
+        {% endblock %}
+    </div>
+</body>
+
+</html>

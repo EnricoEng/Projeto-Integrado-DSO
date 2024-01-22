@@ -12,7 +12,7 @@
 
 # Ignore all JENKINS_HOME except jobs directory, root xml config, and
 # .gitignore file.
-/*
+# /*
 !/jobs
 !/.gitignore
 !/*.xml
@@ -48,3 +48,6 @@ jobs/**/*workspace
 
 # As a result, only Jenkins settings and job config.xml files in JENKINS_HOME
 # will be tracked by git.
+# venv
+.env
+venv

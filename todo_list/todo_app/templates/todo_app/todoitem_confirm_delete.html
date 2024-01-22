@@ -1,0 +1,22 @@
+<!-- todo_list/todo_app/templates/todo_app/todoitem_confirm_delete.html -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Excluir To-do Item</h3>
+
+<p>Você tem certeza que quer excluir este item da lista: <b>{{ object.title }}</b>
+   from the list <i>{{ todo_list.title }}</i>?</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <input
+        value="Sim, excluir."
+        type="submit">
+    <input
+        value="Cancelar"
+        type="button"
+        onclick="location.href='{% url "list" todo_list.id %}';">
+</form>
+
+{% endblock %}

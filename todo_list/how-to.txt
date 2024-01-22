@@ -1,0 +1,10 @@
+crie o virtual environment
+Linux
+$ python -m venv venv
+$ source venv/bin/activate
+
+Windows
+C:\> python -m venv venv
+C:\> venv\Scripts\activate.bat
+
+Também precisa ser criado o arquivo .env com as variáveis de ambiente
