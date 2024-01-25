@@ -16,7 +16,7 @@ class ToDoItemForm(forms.ModelForm):
         label='Título',
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Classe",
+                "placeholder": "Título",
                 "class": "form-control col-md-8",
                 "type": "text"
             }
@@ -33,12 +33,18 @@ class ToDoItemForm(forms.ModelForm):
     due_date = forms.DateTimeField(
         label='Vencimento',
         widget=forms.DateTimeInput(
-            # attrs={
-            #     'type': 'date'
-            # }
         )
     )
 
     class Meta:
         model = ToDoItem
         fields = ('todo_list', 'title', 'description', 'due_date')
+
+class ToDoListForm(forms.ModelForm):
+
+    class Meta:
+        model = ToDoList
+        fields = ['title', ]
+        labels = {
+            'title': 'Título',
+        }

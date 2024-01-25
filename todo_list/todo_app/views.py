@@ -2,7 +2,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import ToDoList, ToDoItem
-from .forms import ToDoItemForm
+from .forms import ToDoItemForm, ToDoListForm
 
 
 class ListListView(LoginRequiredMixin, ListView):
@@ -23,7 +23,7 @@ class ItemListView(LoginRequiredMixin, ListView):
     
 class ListCreate(LoginRequiredMixin, CreateView):
     model = ToDoList
-    fields = ["title"]
+    form_class = ToDoListForm
 
     def get_context_data(self):
         context = super(ListCreate, self).get_context_data()
