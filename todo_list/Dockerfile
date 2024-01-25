@@ -39,9 +39,9 @@ RUN pip install --no-cache /home/todo/wheels/*
 
 
 # copy entrypoint.sh
-#COPY ./entrypoint.sh .
-#RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.sh
-#RUN chmod +x $APP_HOME/entrypoint.sh
+COPY ./entrypoint.sh .
+RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.sh
+RUN chmod +x $APP_HOME/entrypoint.sh
 
 # chown all the files to the app user
 RUN chown -R todo:todo $APP_HOME
@@ -50,5 +50,5 @@ RUN chown -R todo:todo $APP_HOME
 USER todo
 
 # run entrypoint.sh
-#ENTRYPOINT ["/home/sai/web/entrypoint.sh"]
+ENTRYPOINT ["/home/todo/web/entrypoint.sh"]
 CMD ["gunicorn", "--config", "todo_project.wsgi"]

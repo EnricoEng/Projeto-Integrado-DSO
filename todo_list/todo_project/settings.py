@@ -39,6 +39,8 @@ ALLOWED_HOSTS = [env('SERVER', default='127.0.0.1'),]
 
 CSRF_TRUSTED_ORIGINS = ['https://' + env('SERVER', default='127.0.0.1')]
 
+#CORS_ALLOW_ALL_ORIGINS = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -93,11 +95,11 @@ WSGI_APPLICATION = 'todo_project.wsgi.application'
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.getenv('DB_NAME', 'DB_NAME'),
-            'USER': os.getenv('DB_USERNAME', 'DB_USERNAME'),
-            'PASSWORD': os.getenv('DB_PASS', 'DB_PASS'),
-            'HOST': os.getenv('DB_HOST', 'DB_HOST'),
-            'PORT': os.getenv('DB_PORT', 'DB_PORT'),
+            'NAME': env('POSTGRES_DB'),
+            'USER': env('POSTGRES_USER'),
+            'PASSWORD': env('POSTGRES_PASSWORD'),
+            'HOST': env('POSTGRES_HOST'),
+            'PORT': env('POSTGRES_PORT'),
     },
 }
 

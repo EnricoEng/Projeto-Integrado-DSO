@@ -16,15 +16,13 @@ services:
     depends_on:
       - dbtodo
   dbtodo:
-    image: postgres:13.0-alpine
+    image: postgres:15.2-bullseye
     volumes:
       - postgres_data_todo:/var/lib/postgresql/data/
     ports:
       - '15432:5432'
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: dbtodo
+    env_file:
+      - exemplo.env
   nginx_todo:
    build: ./nginx
    volumes:
