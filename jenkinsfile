@@ -1,59 +1,17 @@
 pipeline {
     agent any
-
-   // tools {
-     //   'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker'    
-    //}
-
-    environment {
-        DOCKER_IMAGE = 'admin/todo_app'
-   }
-    
     stages {
-        stage('Github'){
+        stage("Verify tooling") {
             steps{
-                git branch: 'main', url: 'https://github.com/EnricoEng/Projeto-Integrado-DSO.git'
-            }
-        }
-        
-    
-        stage('Build Docker Image') {
-            steps {
-              script {
-                    // Construir a imagem Docker
-                   docker.build(env.DOCKER_IMAGE, '-f Dockerfile .')
-              }
-            }
-        }
-
-        stage('OWASP Dependency-Check Vulnerabilities') {
-            steps {
-                dependencyCheck additionalArguments: ''' 
-                -o './'
-                -s './'
-                -f 'ALL' 
-                --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
-
-                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-            }
-        }
-
-        //stage('SAST') {
-            
-        //}
-    }
-
-    post {
-        always {
-            // Limpar recursos
-            script {
-                // Remover a imagem Docker localmente
-                docker.image(env.DOCKER_IMAGE).remove()
+                sh '''
+                    docker info
+                    docker version
+                    docker compose version
+                    curl --version 
+                    jq --version
+                '''
+                
             }
         }
     }
-
-        
-      
-    
 }
