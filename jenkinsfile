@@ -3,15 +3,30 @@ pipeline {
     stages {
         stage("Verify tooling") {
             steps{
+                //docker info
+                    //docker version
+                    //jq --version
                 sh '''
-                    docker info
-                    docker version
                     docker compose version
                     curl --version 
-                    jq --version
                 '''
                 
             }
         }
+      
+      
+        stage('Github'){
+            steps{
+                git branch: 'main', url: 'https://github.com/EnricoEng/Projeto-Integrado-DSO.git'
+            }
+        }
+        
+        stage("Starting Container") {
+            steps{
+                sh 'docker compose -f todo_list/docker-compose.yml up -d --no-color --wait'
+                sh 'docker compose ps'
+            }
+        }
+        
     }
 }
