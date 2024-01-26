@@ -18,7 +18,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/todo/")
+                return redirect("/todo/app/")
             else:
                 msg = 'Invalid credentials'
         else:
@@ -42,7 +42,7 @@ def register_user(request):
             msg = 'User created successfully.'
             success = True
 
-            # return redirect("/login/")
+            return redirect("/todo/")
 
         else:
             msg = 'Form is not valid'

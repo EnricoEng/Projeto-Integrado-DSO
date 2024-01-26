@@ -35,11 +35,11 @@ SECRET_KEY = env('SECRET_KEY', default='S#perS3crEt_007')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = [env('SERVER', default='127.0.0.1'),]
+ALLOWED_HOSTS = [env('SERVER'),]
 
-CSRF_TRUSTED_ORIGINS = ['https://' + env('SERVER', default='127.0.0.1')]
+CSRF_TRUSTED_ORIGINS = [env('CSRF_TRUSTED_ORIGINS')]
 
-#CORS_ALLOW_ALL_ORIGINS = True
+USE_X_FORWARDED_HOST = True
 
 # Application definition
 
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     #apps
     'accounts',
     'todo_app',
+
 ]
 
 MIDDLEWARE = [
@@ -139,7 +140,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
+STATIC_URL = 'todo/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
