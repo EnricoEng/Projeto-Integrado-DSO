@@ -3,12 +3,12 @@ pipeline {
     stages {
         stage("Verify tooling") {
             steps{
-                //docker info
-                    //docker version
-                    //jq --version
+                //jq --version
                 sh '''
                     docker compose version
                     curl --version 
+                    docker info
+                    docker version
                 '''
                 
             }
@@ -24,7 +24,13 @@ pipeline {
         stage("Starting Container") {
             steps{
                 sh 'docker compose -f todo_list/docker-compose.yml up -d --no-color --wait'
-                sh 'docker compose ps'
+            }
+        }
+        
+        stage('SCA Analysis with Aqua Trivy') {
+            steps {
+                sh 'docker run -v $(pwd):/app aquasecurity/trivy:0.19.2 image --format template --template "@contrib/json.tpl" -o trivy-report.json .'
+                sh 'cat trivy-report.json'
             }
         }
         
