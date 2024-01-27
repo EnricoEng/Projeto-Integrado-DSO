@@ -3,17 +3,14 @@ pipeline {
     stages {
         stage("Verify tooling") {
             steps{
-                //jq --version
                 sh '''
                     docker compose version
                     curl --version 
                     docker info
                     docker version
                 '''
-                
             }
         }
-      
       
         stage('Github'){
             steps{
@@ -26,35 +23,28 @@ pipeline {
                 sh 'docker compose -f todo_list/docker-compose.yml up -d --no-color --wait'
             }
         }
-        
-        stage('SCA Analysis with Aqua Trivy') {
+
+        stage('Scan with Trivy') {
             steps {
-                 // Install trivy
-                sh 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3'
-                sh 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl > html.tpl'
-
-                // Scan all vuln levels
-                sh 'mkdir -p reports'
-                //sh 'trivy image --ignore-unfixed --vuln-type os,library --format template --template "@html.tpl" -o reports/scanResult.html todo_list-nginx_todo'
-                sh 'trivy image --ignore-unfixed --vuln-type os,library --format template --template "@html.tpl" -o reports/scanResult.html todo_list-web_todo'
-                //sh 'trivy image --ignore-unfixed --vuln-type os,library --format template --template "@html.tpl" -o reports/scanResult.html postgres:15.2-bullseye'
-                
-                publishHTML (target : [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'reports',
-                    reportFiles: 'scanResult.html',
-                    reportName: 'Trivy Scan',
-                    reportTitles: 'Trivy Scan'
-                ])
-
-                // Scan again and fail on CRITICAL vulns
-                //sh 'trivy image --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL todo_list-nginx_todo '
-                sh 'trivy image --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL todo_list-web_todo '
-                //sh 'trivy image --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL postgres:15.2-bullseye '
+                script {
+                    // Pull the Trivy Docker image
+                    sh '''
+                        docker pull aquasec/trivy:0.18.3
+                    '''
+                    // Get the list of running Docker containers
+                    def containers = sh(script: 'docker ps --format "{{.Image}}"', returnStdout: true).trim().split('\n')
+                    // Iterate over the list of containers and scan each one with Trivy
+                    for (String container : containers) {
+                        def trivyOutput = sh(script: """
+                            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.18.3 image --exit-code 1 --severity LOW,MEDIUM,HIGH,CRITICAL ${container}
+                        """, returnStdout: true).trim()
+                        // Fail the build if Trivy finds any vulnerabilities
+                        if (trivyOutput != "") {
+                            error("Trivy found vulnerabilities in ${container}:\n${trivyOutput}")
+                        }
+                    }
+                }
             }
         }
-        
     }
 }
