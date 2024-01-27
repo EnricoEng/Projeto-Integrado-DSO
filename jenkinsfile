@@ -29,8 +29,30 @@ pipeline {
         
         stage('SCA Analysis with Aqua Trivy') {
             steps {
-                sh 'docker run -v $(pwd):/app aquasecurity/trivy:0.19.2 image --format template --template "@contrib/json.tpl" -o trivy-report.json .'
-                sh 'cat trivy-report.json'
+                 // Install trivy
+                sh 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3'
+                sh 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl > html.tpl'
+
+                // Scan all vuln levels
+                sh 'mkdir -p reports'
+                //sh 'trivy image --ignore-unfixed --vuln-type os,library --format template --template "@html.tpl" -o reports/scanResult.html todo_list-nginx_todo'
+                sh 'trivy image --ignore-unfixed --vuln-type os,library --format template --template "@html.tpl" -o reports/scanResult.html todo_list-web_todo'
+                //sh 'trivy image --ignore-unfixed --vuln-type os,library --format template --template "@html.tpl" -o reports/scanResult.html postgres:15.2-bullseye'
+                
+                publishHTML (target : [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'reports',
+                    reportFiles: 'scanResult.html',
+                    reportName: 'Trivy Scan',
+                    reportTitles: 'Trivy Scan'
+                ])
+
+                // Scan again and fail on CRITICAL vulns
+                //sh 'trivy image --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL todo_list-nginx_todo '
+                sh 'trivy image --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL todo_list-web_todo '
+                //sh 'trivy image --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL postgres:15.2-bullseye '
             }
         }
         
