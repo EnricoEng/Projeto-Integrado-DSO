@@ -39,6 +39,12 @@ ALLOWED_HOSTS = [env('SERVER'),]
 
 CSRF_TRUSTED_ORIGINS = [env('CSRF_TRUSTED_ORIGINS')]
 
+CSRF_COOKIE_SECURE = True
+
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
 # only send the session cookie over HTTPS connections
 SESSION_COOKIE_SECURE = True
 
@@ -49,6 +55,8 @@ SESSION_COOKIE_HTTPONLY = True
 # session will expire and be deleted once the user closes their web browser
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+
+SECURE_HSTS_SECONDS = 300  # set low, but when site is ready for deployment, set to at least 15768000 (6 months)
 
 # Application definition
 
