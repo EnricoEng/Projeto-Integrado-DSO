@@ -8,3 +8,13 @@ C:\> python -m venv venv
 C:\> venv\Scripts\activate.bat
 
 Também precisa ser criado o arquivo .env com as variáveis de ambiente
+
+No container da aplicação web_todo ao realizar o primeiro acesso:
+acesse o container
+    sudo docker exec -it todo_list-web_todo-1 bash
+faça a migração do banco de dados para o container do PostgreSQL
+    python manage.py migrate
+Crie um superuser
+    python manage.py createsuperuser
+Envio do staticfiles para o servidor web nginx
+    python manage.py collectstatic --no-input --clear
