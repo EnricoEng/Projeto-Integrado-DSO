@@ -27,7 +27,7 @@ services:
    build: ./nginx
    volumes:
      - static_volume_todo:/home/todo/web/staticfiles
-     - /home/certs:/etc/ssl/certs/todo
+     - ./certs:/etc/ssl/certs/todo
 #      - media_volume_sai:/home/sai/web/mediafiles
    ports:
      - '1337:80'
