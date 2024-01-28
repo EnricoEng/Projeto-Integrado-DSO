@@ -16,3 +16,5 @@ Thumbs.db
 .cache/
 .temp/
 ./certs
+./nginx/nginx-selfsigned.crt
+./nginx/nginx-selfsigned.key
