@@ -30,7 +30,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY', default='S#perS3crEt_007')
+SECRET_KEY = env('SECRET_KEY', default='cewo71y5tk!uvni4mu!^k*6oz^#gm_myet&92o!-g7$bmc&a^7')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
@@ -39,7 +39,16 @@ ALLOWED_HOSTS = [env('SERVER'),]
 
 CSRF_TRUSTED_ORIGINS = [env('CSRF_TRUSTED_ORIGINS')]
 
-USE_X_FORWARDED_HOST = True
+# only send the session cookie over HTTPS connections
+SESSION_COOKIE_SECURE = True
+
+# adds an extra layer of security. 
+# When this is enabled, the session cookie cannot be accessed by JavaScript code running on the client's browser
+SESSION_COOKIE_HTTPONLY = True 
+
+# session will expire and be deleted once the user closes their web browser
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 
 # Application definition
 
